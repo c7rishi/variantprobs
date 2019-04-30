@@ -20,10 +20,22 @@ GoodTuring <- function(r = NULL, N_r = NULL,
   tmp
 }
 
-
-GoodTuringProbs <- function(r = NULL, N_r = NULL,
+#' computing good turing probabilities
+#'
+GoodTuringProbs <- function(counts = NULL,
+                            r = NULL, N_r = NULL,
                             m = NULL, conf = 1.96,
                             N0min = 0) {
+
+  if (all(is.null(counts), is.null(r), is.null(N_r))) {
+    stop("Either provide (a) \'counts\', or (b) \'r\' and \'N_r\'")
+  }
+
+  if(any(is.null(r), is.null(N_r))) {
+    tmp <- rle(sort(unname(counts)))
+    r <- tmp$values
+    N_r <- tmp$lengths
+  }
 
   if (length(N_r[r==1]) == 0) {
     p_GT <- NA_real_
@@ -31,7 +43,7 @@ GoodTuringProbs <- function(r = NULL, N_r = NULL,
   else {
     GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
 
-    N0est <- max(chao_est(r = r, n_r = N_r, m = m), N0min)
+    N0est <- max(chao_est(r = r, N_r = N_r, m = m), N0min)
 
     p0 <- N_r[r == 1]/N0est/m
 

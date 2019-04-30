@@ -4,14 +4,14 @@
 #' training cohort
 #' @param counts vector of counts or frequencies of the observed variants.
 #' @param r unique frequencies.
-#' @param n_r frequency of frequency r.
+#' @param N_r frequency of frequency r.
 #' @param  m training cohort size.
 #' @param t positive scalar. The proportion of the future (test) cohort size to the
 #' trianing cohort size.
 #' @param adj logical. Should the Orlitsky et al. adjustment be used?
 #' Defaults to \code{TRUE}. Ignored if \code{t < 1}.
 #' @note  Either (a) \code{counts}, or (b) \code{r} and
-#' \code{n_r} must be provided.
+#' \code{N_r} must be provided.
 #' @details Computes the original Good Toulmin (1956) estimate of \eqn{\Delta(t)} if \code{t <= 1}. If
 #' \code{t > 1}, the Efron-Thisted estimate (if \code{adj = FALSE}) or the
 #' Efron-Thisted estimate with Orlitsky et al. (2016) adjustment is computed.
@@ -56,32 +56,32 @@
 #'
 #' @export
 sgt <- function(counts = NULL,
-                r = NULL, n_r = NULL,
+                r = NULL, N_r = NULL,
                 m, t = 1, adj = TRUE) {
 
-  if (all(is.null(counts), is.null(r), is.null(n_r))) {
-    stop("Either provide (a) \'counts\', or (b) \'r\' and \'n_r\'")
+  if (all(is.null(counts), is.null(r), is.null(N_r))) {
+    stop("Either provide (a) \'counts\', or (b) \'r\' and \'N_r\'")
   }
 
-  if(any(is.null(r), is.null(n_r))) {
+  if(any(is.null(r), is.null(N_r))) {
     tmp <- rle(sort(unname(counts)))
     r <- tmp$values
-    n_r <- tmp$lengths
+    N_r <- tmp$lengths
   }
 
 
-  n_r_obs <- n_r
-  names(n_r_obs) <- r
+  N_r_obs <- N_r
+  names(N_r_obs) <- r
 
 
-  if (any(length(c(r, n_r)) == 0)) {
+  if (any(length(c(r, N_r)) == 0)) {
     return(NA)
   } else {
 
     one_to_maxr <- seq_len(max(r))
-    n_r <- rep(0, length(one_to_maxr))
-    names(n_r) <- one_to_maxr
-    n_r[names(n_r_obs)] <- n_r_obs
+    N_r <- rep(0, length(one_to_maxr))
+    names(N_r) <- one_to_maxr
+    N_r[names(N_r_obs)] <- N_r_obs
 
 
     if (t <= 1) {
@@ -108,6 +108,6 @@ sgt <- function(counts = NULL,
                        log.p = TRUE)))
     }
 
-    floor(sum(n_r * h_r))
+    floor(sum(N_r * h_r))
   }
 }
