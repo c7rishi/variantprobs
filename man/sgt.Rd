@@ -7,14 +7,14 @@ number of new variants in
 a future (test) cohort that is \eqn{t} times as large as the
 training cohort}
 \usage{
-sgt(counts = NULL, r = NULL, n_r = NULL, m, t = 1, adj = TRUE)
+sgt(counts = NULL, r = NULL, N_r = NULL, m, t = 1, adj = TRUE)
 }
 \arguments{
 \item{counts}{vector of counts or frequencies of the observed variants.}
 
 \item{r}{unique frequencies.}
 
-\item{n_r}{frequency of frequency r.}
+\item{N_r}{frequency of frequency r.}
 
 \item{m}{training cohort size.}
 
@@ -37,7 +37,7 @@ Efron-Thisted estimate with Orlitsky et al. (2016) adjustment is computed.
 }
 \note{
 Either (a) \code{counts}, or (b) \code{r} and
-\code{n_r} must be provided.
+\code{N_r} must be provided.
 }
 \examples{
 \dontrun{

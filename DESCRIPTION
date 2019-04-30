@@ -15,4 +15,5 @@ Imports: methods,
          stats,
          edgeR,
          data.table
+Suggests: devtools
 RoxygenNote: 6.0.1

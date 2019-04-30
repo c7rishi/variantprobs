@@ -22,6 +22,7 @@ GoodTuring <- function(r = NULL, N_r = NULL,
 
 #' computing good turing probabilities
 #'
+#' @export
 GoodTuringProbs <- function(counts = NULL,
                             r = NULL, N_r = NULL,
                             m = NULL, conf = 1.96,
@@ -52,10 +53,17 @@ GoodTuringProbs <- function(counts = NULL,
     p_atleast_1new <- 1 - exp(-N_r[r == 1]/m)
 
 
+    if (is.null(counts)) {
+
     p_GT <- c(p_atleast_1new, p0, GT$proportion)
     names(p_GT) <- c("atleast_1new",
                      "0",
                      GT$count)
+    } else {
+      tmp_probs <- GT$proportion
+      names(tmp_probs) <- GT$count
+
+    }
   }
   p_GT
 }
