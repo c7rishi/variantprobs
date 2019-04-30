@@ -5,8 +5,45 @@
 \title{computing good turing probabilities}
 \usage{
 GoodTuringProbs(counts = NULL, r = NULL, N_r = NULL, m = NULL,
-  conf = 1.96, N0min = 0)
+  conf = 1.96, N0min = 0, N0 = NULL)
+}
+\arguments{
+\item{counts}{vector of counts or frequencies of the observed variants.}
+
+\item{r}{unique frequencies.}
+
+\item{N_r}{frequency of frequency r.}
+
+\item{m}{training cohort size.}
+
+\item{N0min}{the minimum value of N0, if known, to be used while
+estiamting \code{N0}. Ignored if N0 is not \code{NULL}.}
+
+\item{N0}{the total number of unobserved variants. If \code{NULL},
+\code{N0} is estimated using Chao's formula.}
 }
 \description{
 computing good turing probabilities
+}
+\examples{
+\dontrun{
+# load tcga data
+data("tcga")
+tcga <- data.table::setDT(tcga)
+
+# calculate variant frequencies for KRAS
+var_freq <- tcga[Hugo_Symbol == "KRAS",
+                 .(v_f = length(unique(patient_id))),
+                 by = .(Hugo_Symbol, HGVSp_Short)
+                 ]
+v_f <- var_freq$v_f
+names(v_f) <- var_freq$HGVSp_Short
+
+# calculate cohort size
+m <- length(unique(tcga$patient_id))
+
+
+# Good Turing estimates
+GoodTuringProbs(counts = v_f, m = m)
+}
 }
