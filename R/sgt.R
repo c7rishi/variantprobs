@@ -1,0 +1,113 @@
+#' Smooth Good-Toulmin estimate of \eqn{\Delta(t)}, the (expected)
+#' number of new variants in
+#' a future (test) cohort that is \eqn{t} times as large as the
+#' training cohort
+#' @param counts vector of counts or frequencies of the observed variants.
+#' @param r unique frequencies.
+#' @param n_r frequency of frequency r.
+#' @param  m training cohort size.
+#' @param t positive scalar. The proportion of the future (test) cohort size to the
+#' trianing cohort size.
+#' @param adj logical. Should the Orlitsky et al. adjustment be used?
+#' Defaults to \code{TRUE}. Ignored if \code{t < 1}.
+#' @note  Either (a) \code{counts}, or (b) \code{r} and
+#' \code{n_r} must be provided.
+#' @details Computes the original Good Toulmin (1956) estimate of \eqn{\Delta(t)} if \code{t <= 1}. If
+#' \code{t > 1}, the Efron-Thisted estimate (if \code{adj = FALSE}) or the
+#' Efron-Thisted estimate with Orlitsky et al. (2016) adjustment is computed.
+#'
+#' @references
+#' Good, I. J., & Toulmin, G. H. (1956). The number of
+#' new species, and the increase in population coverage,
+#' when a sample is increased. Biometrika, 43(1–2), 45–63.
+#' https://doi.org/10.1093/biomet/43.1-2.45.
+#'
+#' Efron, B., & Thisted, R. (1976). Estimating the Number
+#' of Unsen Species: How Many Words Did Shakespeare
+#' Know? Biometrika, 63(3), 435–447.
+#' Retrieved from http://www.jstor.org/stable/2335721.
+#'
+#' Orlitsky, A., Suresh, A. T., & Wu, Y. (2016). Optimal
+#' prediction of the number of unseen species. Proceedings
+#' of the National Academy of Sciences, 113(47), 13283–13288.
+#' https://doi.org/10.1073/pnas.1607774113
+#'
+#' @examples
+#' \dontrun{
+#' # load tcga data
+#' data("tcga")
+#' tcga <- data.table::setDT(tcga)
+#'
+#' # calculate variant frequencies
+#' var_freq <- tcga[,
+#'                  .(v_f = length(unique(patient_id))),
+#'                  by = .(Hugo_Symbol, HGVSp_Short)
+#'                  ]
+#'
+#' # calculate cohort size
+#' m <- length(unique(tcga$patient_id))
+#'
+#'
+#' # SGT estimate for t = 0.5, 1, 10
+#' sgt(counts = var_freq$v_f, m = m, t = 0.5)
+#' sgt(counts = var_freq$v_f, m = m, t = 1)
+#' sgt(counts = var_freq$v_f, m = m, t = 10)
+#' }
+#'
+#' @export
+sgt <- function(counts = NULL,
+                r = NULL, n_r = NULL,
+                m, t = 1, adj = TRUE) {
+
+  if (all(is.null(counts), is.null(r), is.null(n_r))) {
+    stop("Either provide (a) \'counts\', or (b) \'r\' and \'n_r\'")
+  }
+
+  if(any(is.null(r), is.null(n_r))) {
+    tmp <- rle(sort(unname(counts)))
+    r <- tmp$values
+    n_r <- tmp$lengths
+  }
+
+
+  n_r_obs <- n_r
+  names(n_r_obs) <- r
+
+
+  if (any(length(c(r, n_r)) == 0)) {
+    return(NA)
+  } else {
+
+    one_to_maxr <- seq_len(max(r))
+    n_r <- rep(0, length(one_to_maxr))
+    names(n_r) <- one_to_maxr
+    n_r[names(n_r_obs)] <- n_r_obs
+
+
+    if (t <= 1) {
+      (h_r <- (-1)^(one_to_maxr+1) * t)
+    } else if (adj) {
+      theta <- 2/(2+t)
+      k <- floor(0.5 * logb(m*t^2/(t-1), 3))
+      (h_r <- (-1)^(one_to_maxr+1) *
+          exp(one_to_maxr * log(t) +
+                pbinom(q = one_to_maxr - 1,
+                       size = k,
+                       prob = theta,
+                       lower.tail = FALSE,
+                       log.p = TRUE)))
+    } else {
+      theta <- 1/(1+t)
+      k <- floor(0.5 * logb(m*t^2/(t-1), 2))
+      (h_r <- (-1)^(one_to_maxr+1) *
+          exp(one_to_maxr * log(t) +
+                pbinom(q = one_to_maxr - 1,
+                       size = k,
+                       prob = theta,
+                       lower.tail = FALSE,
+                       log.p = TRUE)))
+    }
+
+    floor(sum(n_r * h_r))
+  }
+}
