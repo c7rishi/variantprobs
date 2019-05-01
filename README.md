@@ -1,6 +1,6 @@
 # R package `variantprobs`
 
-Estimates probabilities and numbers of gene variants based on observed mutation frequencies
+Estimates probabilities and expected numbers of mutations in the tumor genome based on observed mutation frequencies. 
 
 ## How to install
 
