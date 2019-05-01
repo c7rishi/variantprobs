@@ -41,21 +41,21 @@
 #' # calculate variant frequencies
 #' var_freq <- tcga[,
 #'                  .(v_f = length(unique(patient_id))),
-#'                  by = .(Hugo_Symbol, HGVSp_Short)
+#'                  by = .(Hugo_Symbol, Variant)
 #'                  ]
 #'
 #' # calculate cohort size
 #' m <- length(unique(tcga$patient_id))
 #'
 #'
-#' # SGT estimate for t = 0.5, 1, 10
-#' sgt(counts = var_freq$v_f, m = m, t = 0.5)
-#' sgt(counts = var_freq$v_f, m = m, t = 1)
-#' sgt(counts = var_freq$v_f, m = m, t = 10)
+#' # SGT Delta(t) estimate for t = 0.5, 1, 10
+#' sgt_Delta(counts = var_freq$v_f, m = m, t = 0.5)
+#' sgt_Delta(counts = var_freq$v_f, m = m, t = 1)
+#' sgt_Delta(counts = var_freq$v_f, m = m, t = 10)
 #' }
 #'
 #' @export
-sgt <- function(counts = NULL,
+sgt_Delta <- function(counts = NULL,
                 r = NULL, N_r = NULL,
                 m, t = 1, adj = TRUE) {
 
