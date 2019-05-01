@@ -3,7 +3,7 @@ Type: Package
 Title: Computing Probabilities of Gene Variants
 Version: 0.1.0
 Author: Saptarshi Chakraborty, Colin B. Begg, Ronglai Shen
-Maintainer: The package maintainer <chakrabs@mskcc.org>
+Maintainer: Saptarshi Chakraborty <chakrabs@mskcc.org>
 Description: Computes estimated probabilities and numbers of gene specific variants.
 License: GPL-3
 Encoding: UTF-8
