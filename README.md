@@ -1,7 +1,6 @@
 # R package `variantprobs`
 
-Calculates the estiamted probabilities and number of variants
-based on observed frequencies
+Estimates probabilities and numbers of gene variants based on observed mutation frequencies
 
 ## How to install
 
