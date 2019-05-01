@@ -1,0 +1,31 @@
+#' TCGA data on somatic non-synonymous single
+#' neucleotide variants (SNV)
+#'
+#' A subset of the TCGA whole exome sequencing data
+#' containing non-synonymous SNV mutations. More specifically,
+#' the subset of the publicly available TCGA data with
+#' \code{Variant_Type == "SNP"} and \code{ Variant_Classification %in%
+#' c("Missense_Mutation", "Nonsense_Mutation", "Nonstop_Mutation").}
+#'
+#' @format A dataset with 1,991,488 rows and 5 columns:
+#' \describe{
+#' \item{Hugo_Symbol}{the gene label}
+#' \item{Variant}{the variant label. Obtained by conctatenating
+#' the columns labeled
+#' 'Hugo_Symbol', 'Chromosome', 'Start_Position', 'Tumor_Seq_Allele1',
+#' and 'Tumor_Seq_Allele2' in the original TCGA data}
+#' \item{patient_id}{the patient (tumor) label. Obtained by extracting
+#' the first 16 characters of the column'Tumor_Sample_Barcode' in
+#' the original TCGA data}
+#' \item{Cancer_Code}{the cancer category associated with the tumor. Obtained by
+#' matching the TSS code (the 6th and 7th characters of 'Tumor_Sample_Barcode'
+#' column of the original TCGA data) with publicly avaialbe TSS study names.}
+#'
+#' }
+#' @source
+#' \describe{
+#' \item{original TCGA data}{...}
+#' \item{TSS study}{...}
+#' }
+
+"tcga"

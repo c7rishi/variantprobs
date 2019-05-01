@@ -14,7 +14,7 @@
 #' \code{N_r} must be provided.
 #' @details Computes the original Good Toulmin (1956) estimate of \eqn{\Delta(t)} if \code{t <= 1}. If
 #' \code{t > 1}, the Efron-Thisted estimate (if \code{adj = FALSE}) or the
-#' Efron-Thisted estimate with Orlitsky et al. (2016) adjustment is computed.
+#' Efron-Thisted estimate with Orlitsky et al. (2016) adjustment (if \code{adj = TRUE}) is computed.
 #'
 #' @references
 #' Good, I. J., & Toulmin, G. H. (1956). The number of
