@@ -7,7 +7,7 @@
 mutation frquencies}
 \usage{
 goodturing_probs(counts = NULL, r = NULL, N_r = NULL, m = NULL,
-  conf = 1.96, N0min = 0, N0 = NULL)
+  conf = 1.96, N0min = 0, N0 = NULL, N12_imp = 1)
 }
 \arguments{
 \item{counts}{vector of counts or frequencies of the observed variants.}
@@ -23,6 +23,9 @@ estiamting \code{N0}. Ignored if N0 is not \code{NULL}.}
 
 \item{N0}{the total number of unobserved variants. If \code{NULL},
 \code{N0} is estimated using Chao's formula.}
+
+\item{N12_imp}{imputed value of N1 and N2 if either of them is 0.
+Defaults to 1.}
 }
 \description{
 Computing Good Turing probabilities of encountering gene variants
@@ -41,7 +44,7 @@ var_freq <- tcga[Hugo_Symbol == "KRAS",
                  by = .(Hugo_Symbol, Variant)
                  ]
 v_f <- var_freq$v_f
-names(v_f) <- var_freq$HGVSp_Short
+names(v_f) <- var_freq$Variant
 
 # calculate cohort size
 m <- length(unique(tcga$patient_id))

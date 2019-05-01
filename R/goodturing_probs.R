@@ -29,6 +29,8 @@ GoodTuring <- function(r = NULL, N_r = NULL,
 #' \code{N0} is estimated using Chao's formula.
 #' @param N0min the minimum value of N0, if known, to be used while
 #' estiamting \code{N0}. Ignored if N0 is not \code{NULL}.
+#' @param N12_imp imputed value of N1 and N2 if either of them is 0.
+#' Defaults to 1.
 #' @examples
 #' \dontrun{
 #' # load tcga data
@@ -41,7 +43,7 @@ GoodTuring <- function(r = NULL, N_r = NULL,
 #'                  by = .(Hugo_Symbol, Variant)
 #'                  ]
 #' v_f <- var_freq$v_f
-#' names(v_f) <- var_freq$HGVSp_Short
+#' names(v_f) <- var_freq$Variant
 #'
 #' # calculate cohort size
 #' m <- length(unique(tcga$patient_id))
@@ -52,10 +54,11 @@ GoodTuring <- function(r = NULL, N_r = NULL,
 #' }
 #' @export
 goodturing_probs <- function(counts = NULL,
-                            r = NULL, N_r = NULL,
-                            m = NULL, conf = 1.96,
-                            N0min = 0,
-                            N0 = NULL) {
+                             r = NULL, N_r = NULL,
+                             m = NULL, conf = 1.96,
+                             N0min = 0,
+                             N0 = NULL,
+                             N12_imp = 1) {
 
   estN0 <- is.null(N0)
 
@@ -69,43 +72,54 @@ goodturing_probs <- function(counts = NULL,
     N_r <- tmp$lengths
   }
 
-  if (length(N_r[r==1]) == 0) {
-    p_GT <- NA_real_
+  if (any(length(N_r[r == 1]) == 0, N_r[r == 1] == 0)) {
+    N_r <- c(N_r, 1)
+    r <- c(r, 1)
   }
-  else {
-    GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
 
-    N0est <- ifelse(estN0,
-                    max(chao_est(r = r, N_r = N_r, m = m), N0min),
-                    N0)
-
-    p0 <- N_r[r == 1]/N0est/(m+1)
-
-    # browser()
-    # p_atleast_1new <- 1 - exp(N0est*log(1-p0))
-    p_atleast_1new <- 1 - exp(-N_r[r == 1]/m)
-
-
-    if (is.null(counts) | is.null(names(counts))) {
-
-      p_GT <- c(p_atleast_1new, p0, GT$proportion)
-      names(p_GT) <- c("atleast_1new",
-                       "0",
-                       GT$count)
-    } else {
-      tmp_probs <- GT$proportion
-      names(tmp_probs) <- GT$count
-
-
-
-      p_GT <- unname(c(tmp_probs[as.character(counts)],
-                       p0,
-                       p_atleast_1new))
-      names(p_GT) <- c(names(counts),
-                       "each_unseen",
-                       "atleast_1new")
-
-    }
+  if (any(length(N_r[r == 2]) == 0, N_r[r == 2] == 0)) {
+    N_r <- c(N_r, 2)
+    r <- c(r, 2)
   }
+
+  ord <- order(r)
+  r <- r[ord]
+  N_r <- N_r[ord]
+
+
+  GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
+
+  N0est <- ifelse(estN0,
+                  max(chao_N0(r = r, N_r = N_r, m = m), N0min),
+                  N0)
+
+  p0 <- N_r[r == 1]/N0est/(m+1)
+
+  # browser()
+  # p_atleast_1new <- 1 - exp(N0est*log(1-p0))
+  p_atleast_1new <- 1 - exp(-N_r[r == 1]/m)
+
+
+  if (is.null(counts) | is.null(names(counts))) {
+
+    p_GT <- c(p_atleast_1new, p0, GT$proportion)
+    names(p_GT) <- c("atleast_1new",
+                     "0",
+                     GT$count)
+  } else {
+    tmp_probs <- GT$proportion
+    names(tmp_probs) <- GT$count
+
+
+
+    p_GT <- unname(c(tmp_probs[as.character(counts)],
+                     p0,
+                     p_atleast_1new))
+    names(p_GT) <- c(names(counts),
+                     "each_unseen",
+                     "atleast_1new")
+
+  }
+
   p_GT
 }
