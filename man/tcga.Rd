@@ -21,10 +21,7 @@ column of the original TCGA data) with publicly avaialbe TSS study names.}
 
 }}
 \source{
-\describe{
-\item{original TCGA data}{...}
-\item{TSS study}{...}
-}
+https://gdc.cancer.gov/about-data/publications/mc3-2017
 }
 \usage{
 tcga

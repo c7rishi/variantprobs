@@ -19,10 +19,7 @@ the original MSK-IMPACT data}
 
 }}
 \source{
-\describe{
-\item{original MSK-IMPACT data}{...}
-
-}
+https://github.com/cBioPortal/datahub
 }
 \usage{
 impact

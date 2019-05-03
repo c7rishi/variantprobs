@@ -23,9 +23,6 @@
 #'
 #' }
 #' @source
-#' \describe{
-#' \item{original TCGA data}{...}
-#' \item{TSS study}{...}
-#' }
+#' https://gdc.cancer.gov/about-data/publications/mc3-2017
 
 "tcga"
