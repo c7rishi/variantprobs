@@ -2,9 +2,13 @@ Package: variantprobs
 Type: Package
 Title: Computing Probabilities of Gene Variants
 Version: 0.1.0
+Date: 2019-05-03
 Author: Saptarshi Chakraborty, Colin B. Begg, Ronglai Shen
 Maintainer: Saptarshi Chakraborty <chakrabs@mskcc.org>
-Description: Computes estimated probabilities and numbers of gene specific variants.
+Description: Computes estimated probabilities and numbers of gene 
+             specific variants. Also contains subsets of TCGA and 
+             MSK-IMPACT data (on non-synomymous single nucleotide 
+             variants). 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -17,3 +21,4 @@ Imports: methods,
          data.table
 Suggests: devtools
 RoxygenNote: 6.0.1
+URL: https://github.com/c7rishi/variantprobs

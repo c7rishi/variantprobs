@@ -1,4 +1,4 @@
-#' TCGA data on somatic non-synonymous single
+#' TCGA data with somatic non-synonymous single
 #' neucleotide variants (SNV)
 #'
 #' A subset of the TCGA whole exome sequencing data
@@ -7,7 +7,7 @@
 #' \code{Variant_Type == "SNP"} and \code{ Variant_Classification %in%
 #' c("Missense_Mutation", "Nonsense_Mutation", "Nonstop_Mutation").}
 #'
-#' @format A dataset with 1,991,488 rows and 5 columns:
+#' @format A dataset with 1,991,488 rows and 4 columns:
 #' \describe{
 #' \item{Hugo_Symbol}{the gene label}
 #' \item{Variant}{the variant label. Obtained by conctatenating

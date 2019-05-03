@@ -3,9 +3,9 @@
 \docType{data}
 \name{tcga}
 \alias{tcga}
-\title{TCGA data on somatic non-synonymous single
+\title{TCGA data with somatic non-synonymous single
 neucleotide variants (SNV)}
-\format{A dataset with 1,991,488 rows and 5 columns:
+\format{A dataset with 1,991,488 rows and 4 columns:
 \describe{
 \item{Hugo_Symbol}{the gene label}
 \item{Variant}{the variant label. Obtained by conctatenating
