@@ -58,7 +58,8 @@ goodturing_probs <- function(counts = NULL,
                              m = NULL, conf = 1.96,
                              N0min = 0,
                              N0 = NULL,
-                             N12_imp = 1) {
+                             N12_imp = 1)  {
+
 
   estN0 <- is.null(N0)
 
@@ -72,32 +73,42 @@ goodturing_probs <- function(counts = NULL,
     N_r <- tmp$lengths
   }
 
+  r_1_impute <- r_2_impute <- FALSE
+
   if (any(length(N_r[r == 1]) == 0, N_r[r == 1] == 0)) {
-    N_r <- c(N_r, N12_imp)
+    N_r <- c(N_r, pmax(N12_imp, 1))
     r <- c(r, 1)
+    r_1_impute <- TRUE
   }
 
   if (any(length(N_r[r == 2]) == 0, N_r[r == 2] == 0)) {
-    N_r <- c(N_r, N12_imp)
+    N_r <- c(N_r, pmax(N12_imp, 1))
     r <- c(r, 2)
+    r_2_impute <- TRUE
   }
 
   ord <- order(r)
   r <- r[ord]
   N_r <- N_r[ord]
+  names(N_r) <- r
 
 
-  GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
+  GT <- variantprobs:::GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
 
   N0est <- ifelse(estN0,
                   max(chao_N0(r = r, N_r = N_r, m = m), N0min),
                   N0)
 
-  p0 <- N_r[r == 1]/N0est/(m+1)
+  N1_adj <- ifelse(r_1_impute, N12_imp, N_r[r == 1])
+  N2_adj <- ifelse(r_2_impute, N12_imp, N_r[r == 2])
 
-  # browser()
-  # p_atleast_1new <- 1 - exp(N0est*log(1-p0))
-  p_atleast_1new <- 1 - exp(-N_r[r == 1]/m)
+  p0 <- N1_adj/N0est/(m+1)
+
+  p_atleast_1new <- 1 - exp(-N1_adj/(m+1))
+
+  # adjust the proportions for 1 & 2
+  GT$proportion[1] <- GT$proportion[1] * N_r[r == 1]/N1_adj
+  GT$proportion[2] <- GT$proportion[2] * N_r[r == 2]/N2_adj
 
 
   if (is.null(counts) | is.null(names(counts))) {
