@@ -73,12 +73,12 @@ goodturing_probs <- function(counts = NULL,
   }
 
   if (any(length(N_r[r == 1]) == 0, N_r[r == 1] == 0)) {
-    N_r <- c(N_r, 1)
+    N_r <- c(N_r, N12_imp)
     r <- c(r, 1)
   }
 
   if (any(length(N_r[r == 2]) == 0, N_r[r == 2] == 0)) {
-    N_r <- c(N_r, 2)
+    N_r <- c(N_r, N12_imp)
     r <- c(r, 2)
   }
 

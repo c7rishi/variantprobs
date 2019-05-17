@@ -7,7 +7,8 @@ number of new variants in
 a future (test) cohort that is \eqn{t} times as large as the
 training cohort}
 \usage{
-sgt_Delta(counts = NULL, r = NULL, N_r = NULL, m, t = 1, adj = TRUE)
+sgt_Delta(counts = NULL, r = NULL, N_r = NULL, m, t = 1,
+  adj = TRUE)
 }
 \arguments{
 \item{counts}{vector of counts or frequencies of the observed variants.}
