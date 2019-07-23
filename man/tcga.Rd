@@ -27,9 +27,9 @@ https://gdc.cancer.gov/about-data/publications/mc3-2017
 tcga
 }
 \description{
-A subset of the TCGA whole exome sequencing data
+A subset of the publicly available TCGA whole exome sequencing data
 containing non-synonymous SNV mutations. More specifically,
-the subset of the publicly available TCGA data with
+the subset of the TCGA data with
 \code{Variant_Type == "SNP"} and \code{ Variant_Classification %in%
 c("Missense_Mutation", "Nonsense_Mutation", "Nonstop_Mutation").}
 }
