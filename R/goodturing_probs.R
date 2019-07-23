@@ -93,7 +93,7 @@ goodturing_probs <- function(counts = NULL,
   names(N_r) <- r
 
 
-  GT <- variantprobs:::GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
+  GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
 
   N0est <- ifelse(estN0,
                   max(chao_N0(r = r, N_r = N_r, m = m), N0min),
