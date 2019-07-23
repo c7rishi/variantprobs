@@ -3,3 +3,6 @@
 export(chao_N0)
 export(goodturing_probs)
 export(sgt_Delta)
+import(data.table)
+import(methods)
+import(stats)
