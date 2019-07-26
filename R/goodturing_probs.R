@@ -1,10 +1,30 @@
-# source("efron_thisted.R")
+# # need an unexported function (.cxx_simple_good_turing)
+# # from edgeR.
+# # Since CRAN does not allow `:::`, this is a
+# # workaround:
+#
+#
+getfrompackage <- function(pkg, name)  {
+  # get(fun,
+  #     envir = asNamespace(pkg),
+  #     inherits = FALSE)
+  pkg <- as.character(substitute(pkg))
+  name <- as.character(substitute(name))
+  get(name, envir = asNamespace(pkg), inherits = FALSE)
+}
+
+
+
 GoodTuring_orig <- function(r = NULL, N_r = NULL, conf = 1.96)
 {
   n <- N_r[r > 0]
   n0 <- N_r[r == 0]
   r <- r[r > 0]
-  out <- .Call(edgeR:::.cxx_simple_good_turing, r, n, conf)
+  out <- .Call(
+    # edgeR:::.cxx_simple_good_turing,
+    getfrompackage("edgeR", ".cxx_simple_good_turing"),
+    r, n, conf
+  )
   names(out) <- c("P0", "proportion")
   out$count <- r
   out$n <- n
@@ -132,5 +152,7 @@ goodturing_probs <- function(counts = NULL,
 
   }
 
+
+  attr(p_GT, "N0") <- N0est
   p_GT
 }
