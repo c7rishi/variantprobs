@@ -4,7 +4,9 @@
 #' @inheritParams sgt_Delta
 #'
 #' @details Calculates Chao (1987) estimate of the total number of
-#' unseen variants
+#' unseen variants. Also provides an approximate standard error ("se") of the
+#' estimate as an attribute, computed using the formula provided in Chao (1987).
+#'
 #' \dontrun{
 #' # load tcga data
 #' data("tcga")

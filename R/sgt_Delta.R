@@ -14,7 +14,9 @@
 #' \code{N_r} must be provided.
 #' @details Computes the original Good Toulmin (1956) estimate of \eqn{\Delta(t)} if \code{t <= 1}. If
 #' \code{t > 1}, the Efron-Thisted estimate (if \code{adj = FALSE}) or the
-#' Efron-Thisted estimate with Orlitsky et al. (2016) adjustment (if \code{adj = TRUE}) is computed.
+#' Efron-Thisted estimate with Orlitsky et al. (2016) adjustment (if \code{adj = TRUE}) is computed. Also
+#' returns an approximate standard error ("se") of the estimate as an attribute, computed using the formula
+#' provided in Efron-Thisted (1976, equation 5.2).
 #'
 #' @references
 #' Good, I. J., & Toulmin, G. H. (1956). The number of
@@ -108,6 +110,9 @@ sgt_Delta <- function(counts = NULL,
                        log.p = TRUE)))
     }
 
-    floor(sum(N_r * h_r))
+    SGT <- sum(h_r * N_r)
+    attr(SGT, "se") <- sqrt(sum(h_r^2 * N_r))
+
+    SGT
   }
 }

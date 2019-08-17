@@ -34,7 +34,9 @@ training cohort
 \details{
 Computes the original Good Toulmin (1956) estimate of \eqn{\Delta(t)} if \code{t <= 1}. If
 \code{t > 1}, the Efron-Thisted estimate (if \code{adj = FALSE}) or the
-Efron-Thisted estimate with Orlitsky et al. (2016) adjustment (if \code{adj = TRUE}) is computed.
+Efron-Thisted estimate with Orlitsky et al. (2016) adjustment (if \code{adj = TRUE}) is computed. Also
+returns an approximate standard error ("se") of the estimate as an attribute, computed using the formula
+provided in Efron-Thisted (1976, equation 5.2).
 }
 \note{
 Either (a) \code{counts}, or (b) \code{r} and
