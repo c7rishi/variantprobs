@@ -1,4 +1,5 @@
 # R package `variantprobs`
+[![DOI](https://zenodo.org/badge/184330494.svg)](https://zenodo.org/badge/latestdoi/184330494)
 
 Estimates probabilities and expected numbers of mutations in the tumor genome based on observed mutation frequencies. 
 
