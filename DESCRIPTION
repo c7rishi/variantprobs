@@ -6,9 +6,9 @@ Date: 2019-05-03
 Author: Saptarshi Chakraborty, Colin B. Begg, Ronglai Shen
 Maintainer: Saptarshi Chakraborty <chakra.saptarshi@gmail.com>
 Description: Computes estimated probabilities and numbers of gene 
-             specific variants. Also contains subsets of TCGA and 
-             MSK-IMPACT data (on non-synomymous single nucleotide 
-             variants). 
+             specific variants. Also contains subsets of the publicly 
+             available TCGA and MSK-IMPACT data 
+             (on non-synomymous single nucleotide variants). 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
