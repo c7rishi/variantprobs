@@ -79,38 +79,40 @@ sgt_Delta <- function(counts = NULL,
   if (any(length(c(r, N_r)) == 0)) {
     return(NA)
   } else {
-
     one_to_maxr <- seq_len(max(r))
     N_r <- rep(0, length(one_to_maxr))
     names(N_r) <- one_to_maxr
     N_r[names(N_r_obs)] <- N_r_obs
 
-
     if (t <= 1) {
-      (h_r <- (-1)^(one_to_maxr+1) * t)
-    } else if (adj) {
-      theta <- 2/(2+t)
-      k <- floor(0.5 * logb(m*t^2/(t-1), 3))
-      (h_r <- (-1)^(one_to_maxr+1) *
-          exp(one_to_maxr * log(t) +
-                pbinom(q = one_to_maxr - 1,
-                       size = k,
-                       prob = theta,
-                       lower.tail = FALSE,
-                       log.p = TRUE)))
+
+      h_r <- - (-t)^one_to_maxr
+
     } else {
-      theta <- 1/(1+t)
-      k <- floor(0.5 * logb(m*t^2/(t-1), 2))
-      (h_r <- (-1)^(one_to_maxr+1) *
-          exp(one_to_maxr * log(t) +
-                pbinom(q = one_to_maxr - 1,
-                       size = k,
-                       prob = theta,
-                       lower.tail = FALSE,
-                       log.p = TRUE)))
+
+      if (adj) {
+        theta <- 2/(2 + t)
+        k <- floor(0.5 * logb(m * t^2/(t - 1), 3))
+      } else {
+        theta <- 1/(1 + t)
+        k <- floor(0.5 * logb(m * t^2/(t - 1), 2))
+      }
+
+      h_r <- -(-1)^one_to_maxr *
+        exp(
+          one_to_maxr * log(t) +
+            pbinom(
+              q = one_to_maxr - 1,
+              size = k,
+              prob = theta,
+              lower.tail = FALSE,
+              log = TRUE
+            )
+        )
     }
 
     SGT <- sum(h_r * N_r)
+
     attr(SGT, "se") <- sqrt(sum(h_r^2 * N_r))
 
     SGT
