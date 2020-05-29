@@ -51,6 +51,9 @@ GoodTuring <- function(r = NULL, N_r = NULL,
 #' estiamting \code{N0}. Ignored if N0 is not \code{NULL}.
 #' @param N12_imp imputed value of N1 and N2 if either of them is 0.
 #' Defaults to 1.
+#' @param N The total number of variants, which is
+#' \code{sum(Nr)} for \code{r >= 0}. Used for computation of N0. Ignored
+#' if N0 is provided.
 #' @examples
 #' \dontrun{
 #' # load tcga data
@@ -74,14 +77,15 @@ GoodTuring <- function(r = NULL, N_r = NULL,
 #' }
 #' @export
 goodturing_probs <- function(counts = NULL,
-                             r = NULL, N_r = NULL,
-                             m = NULL, conf = 1.96,
+                             r = NULL,
+                             N_r = NULL,
+                             m = NULL,
+                             conf = 1.96,
                              N0min = 0,
                              N0 = NULL,
-                             N12_imp = 1)  {
+                             N12_imp = 1,
+                             N = NULL)  {
 
-
-  estN0 <- is.null(N0)
 
   if (all(is.null(counts), is.null(r), is.null(N_r))) {
     stop("Either provide (a) \'counts\', or (b) \'r\' and \'N_r\'")
@@ -115,9 +119,18 @@ goodturing_probs <- function(counts = NULL,
 
   GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
 
-  N0est <- ifelse(estN0,
-                  max(chao_N0(r = r, N_r = N_r, m = m), N0min),
-                  N0)
+  if (is.null(N0) & !is.null(N)) {
+    N0 <- N - sum(N_r[r >= 1])
+    if (N0 <= 0) {
+      stop("'N' must be strictly bigger than sum(Nr[r>=1])")
+    }
+  }
+
+  N0est <- ifelse(
+    is.null(N0),
+    max(chao_N0(r = r, N_r = N_r, m = m), N0min),
+    N0
+  )
 
   N1_adj <- ifelse(r_1_impute, N12_imp, N_r[r == 1])
   N2_adj <- ifelse(r_2_impute, N12_imp, N_r[r == 2])

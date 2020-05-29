@@ -5,7 +5,8 @@
 \alias{impact}
 \title{MSK-IMPACT data on somatic non-synonymous single
 neucleotide variants (SNV)}
-\format{A dataset with 68,919 rows and 5 columns:
+\format{
+A dataset with 68,919 rows and 5 columns:
 \describe{
 \item{Hugo_Symbol}{the gene label}
 \item{Variant}{the variant label. Obtained by conctatenating
@@ -17,7 +18,8 @@ the first 9 characters of the column'Tumor_Sample_Barcode' in
 the original MSK-IMPACT data}
 \item{Cancer_Type}{the cancer category associated with the tumor.}
 
-}}
+}
+}
 \source{
 https://github.com/cBioPortal/datahub
 }

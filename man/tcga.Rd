@@ -5,7 +5,8 @@
 \alias{tcga}
 \title{TCGA data with somatic non-synonymous single
 neucleotide variants (SNV)}
-\format{A dataset with 1,991,488 rows and 4 columns:
+\format{
+A dataset with 1,991,488 rows and 4 columns:
 \describe{
 \item{Hugo_Symbol}{the gene label}
 \item{Variant}{the variant label. Obtained by conctatenating
@@ -19,7 +20,8 @@ the original TCGA data}
 matching the TSS code (the 6th and 7th characters of 'Tumor_Sample_Barcode'
 column of the original TCGA data) with publicly avaialbe TSS study names.}
 
-}}
+}
+}
 \source{
 https://gdc.cancer.gov/about-data/publications/mc3-2017
 }
