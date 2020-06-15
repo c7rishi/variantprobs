@@ -1,17 +1,17 @@
-# # need an unexported function (.cxx_simple_good_turing)
-# # from edgeR.
-# # Since CRAN does not allow `:::`, this is a
-# # workaround:
-#
-#
-getfrompackage <- function(pkg, name)  {
-  # get(fun,
-  #     envir = asNamespace(pkg),
-  #     inherits = FALSE)
-  pkg <- as.character(substitute(pkg))
-  name <- as.character(substitute(name))
-  get(name, envir = asNamespace(pkg), inherits = FALSE)
-}
+# # # need an unexported function (.cxx_simple_good_turing)
+# # # from edgeR.
+# # # Since CRAN does not allow `:::`, this is a
+# # # workaround:
+# #
+# #
+# getfrompackage <- function(pkg, name)  {
+#   # get(fun,
+#   #     envir = asNamespace(pkg),
+#   #     inherits = FALSE)
+#   pkg <- as.character(substitute(pkg))
+#   name <- as.character(substitute(name))
+#   get(name, envir = asNamespace(pkg), inherits = FALSE)
+# }
 
 
 
@@ -20,12 +20,14 @@ GoodTuring_orig <- function(r = NULL, N_r = NULL, conf = 1.96)
   n <- N_r[r > 0]
   n0 <- N_r[r == 0]
   r <- r[r > 0]
-  out <- .Call(
-    # edgeR:::.cxx_simple_good_turing,
-    getfrompackage("edgeR", ".cxx_simple_good_turing"),
-    r, n, conf
-  )
-  names(out) <- c("P0", "proportion")
+  # out0 <- .Call(
+  #   # edgeR:::.cxx_simple_good_turing,
+  #   getfrompackage("edgeR", ".cxx_simple_good_turing"),
+  #   r, n, conf
+  # )
+  out <- good_turing_multinom(r, n, conf)
+  names(out) <- c("P0", "proportion",
+                  "std_error", "slope_okay")
   out$count <- r
   out$n <- n
   out$n0 <- n0
@@ -36,7 +38,9 @@ GoodTuring_orig <- function(r = NULL, N_r = NULL, conf = 1.96)
 GoodTuring <- function(r = NULL, N_r = NULL,
                        m = NULL, conf = 1.96) {
   tmp <- GoodTuring_orig(r = r, N_r = N_r, conf = conf)
-  tmp$proportion <- tmp$proportion * sum(as.numeric(r*N_r))/(m+1)
+  adj_factor <- sum(as.numeric(r*N_r))/(m+1)
+  tmp$proportion <- tmp$proportion * adj_factor
+  tmp$std_error <- tmp$std_error * adj_factor
   tmp
 }
 
@@ -116,8 +120,12 @@ goodturing_probs <- function(counts = NULL,
   N_r <- N_r[ord]
   names(N_r) <- r
 
-
   GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
+
+  if (!GT$slope_okay) {
+    warning("Slope parameter in Gale-Sampson smoothing is >= -1. Final estimates may be unreliable.")
+  }
+
 
   if (is.null(N0) & !is.null(N)) {
     N0 <- N - sum(N_r[r >= 1])
@@ -136,8 +144,15 @@ goodturing_probs <- function(counts = NULL,
   N2_adj <- ifelse(r_2_impute, N12_imp, N_r[r == 2])
 
   p0 <- N1_adj/N0est/(m+1)
+  se_p0 <- p0 * (1/N1_adj + 1/N0est)
 
   p_atleast_1new <- 1 - exp(-N1_adj/(m+1))
+  # using MGF of poisson
+  exp_tmp <- exp(-1/(m+1))
+  var_tmp <- exp(N1_adj * (exp_tmp^2 - 1)) - exp(2 * N1_adj * (exp_tmp - 1))
+  se_p_atleast_1new <- sqrt(var_tmp)
+  # # using delta approximation
+  # se_p_atleast_1new <- exp(-N1_adj/(m+1) ) * 1/(m+1) * sqrt(N1_adj)
 
   # adjust the proportions for 1 & 2
   GT$proportion[1] <- GT$proportion[1] * N_r[r == 1]/N1_adj
@@ -147,25 +162,34 @@ goodturing_probs <- function(counts = NULL,
   if (is.null(counts) | is.null(names(counts))) {
 
     p_GT <- c(p_atleast_1new, p0, GT$proportion)
-    names(p_GT) <- c("atleast_1new",
-                     "0",
-                     GT$count)
+    se_p_GT <- c(se_p_atleast_1new, se_p0, GT$std_error)
+    names(p_GT) <- names(se_p_GT) <-  c(
+      "atleast_1new",
+      "0",
+      GT$count
+    )
   } else {
     tmp_probs <- GT$proportion
-    names(tmp_probs) <- GT$count
-
-
+    tmp_se <- GT$std_error
+    names(tmp_probs) <- names(tmp_se) <- GT$count
 
     p_GT <- unname(c(tmp_probs[as.character(counts)],
                      p0,
                      p_atleast_1new))
-    names(p_GT) <- c(names(counts),
-                     "each_unseen",
-                     "atleast_1new")
+    se_p_GT <- unname(c(tmp_se[as.character(counts)],
+                        se_p0,
+                        se_p_atleast_1new))
+    names(p_GT) <- names(se_p_GT) <-  c(
+      names(counts),
+      "each_unseen",
+      "atleast_1new"
+    )
 
   }
 
-
+  attributes(p_GT)
   attr(p_GT, "N0") <- N0est
+  attr(p_GT, "se") <- se_p_GT
+
   p_GT
 }

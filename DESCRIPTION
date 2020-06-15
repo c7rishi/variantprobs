@@ -15,10 +15,15 @@ LazyData: true
 Depends:
     R (>= 3.3.0)
 biocViews:
-Imports: methods, 
-         stats,
-         edgeR,
-         data.table
+Imports: 
+    methods,
+    stats,
+    edgeR,
+    data.table,
+    Rcpp
 Suggests: devtools
 RoxygenNote: 7.1.0
 URL: https://github.com/c7rishi/variantprobs
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
