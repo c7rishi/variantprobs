@@ -123,7 +123,7 @@ goodturing_probs <- function(counts = NULL,
   GT <- GoodTuring(r = r, N_r = N_r, m = m, conf = conf)
 
   if (!GT$slope_okay) {
-    warning("Slope parameter in Gale-Sampson smoothing is >= -1. Final estimates may be unreliable.")
+    warning("Slope parameter in Gale-Sampson smoothing is > -1. Final estimates may be unreliable.")
   }
 
 
@@ -147,12 +147,12 @@ goodturing_probs <- function(counts = NULL,
   se_p0 <- p0 * (1/N1_adj + 1/N0est)
 
   p_atleast_1new <- 1 - exp(-N1_adj/(m+1))
-  # using MGF of poisson
-  exp_tmp <- exp(-1/(m+1))
-  var_tmp <- exp(N1_adj * (exp_tmp^2 - 1)) - exp(2 * N1_adj * (exp_tmp - 1))
-  se_p_atleast_1new <- sqrt(var_tmp)
-  # # using delta approximation
-  # se_p_atleast_1new <- exp(-N1_adj/(m+1) ) * 1/(m+1) * sqrt(N1_adj)
+  # # using MGF of poisson
+  # exp_tmp <- exp(-1/(m+1))
+  # var_tmp <- exp(N1_adj * (exp_tmp^2 - 1)) - exp(2 * N1_adj * (exp_tmp - 1))
+  # se_p_atleast_1new <- sqrt(var_tmp)
+  # using delta approximation
+  se_p_atleast_1new <- exp(-N1_adj/(m+1) ) * 1/(m+1) * sqrt(N1_adj)
 
   # adjust the proportions for 1 & 2
   GT$proportion[1] <- GT$proportion[1] * N_r[r == 1]/N1_adj
@@ -190,6 +190,7 @@ goodturing_probs <- function(counts = NULL,
   attributes(p_GT)
   attr(p_GT, "N0") <- N0est
   attr(p_GT, "se") <- se_p_GT
+  attr(p_GT, "smooth_slope_ok") <- GT$slope_ok
 
   p_GT
 }
