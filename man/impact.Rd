@@ -4,12 +4,12 @@
 \name{impact}
 \alias{impact}
 \title{MSK-IMPACT data on somatic non-synonymous single
-neucleotide variants (SNV)}
+nucleotide variants (SNV)}
 \format{
 A dataset with 68,919 rows and 5 columns:
 \describe{
 \item{Hugo_Symbol}{the gene label}
-\item{Variant}{the variant label. Obtained by conctatenating
+\item{Variant}{the variant label. Obtained by concatenating
 the columns labeled
 'Hugo_Symbol', 'Chromosome', 'Start_Position', 'Tumor_Seq_Allele1',
 and 'Tumor_Seq_Allele2' in the original MSK-IMPACT data}
@@ -17,7 +17,14 @@ and 'Tumor_Seq_Allele2' in the original MSK-IMPACT data}
 the first 9 characters of the column'Tumor_Sample_Barcode' in
 the original MSK-IMPACT data}
 \item{Cancer_Type}{the cancer category associated with the tumor.}
-
+\item{MS}{dominant Mutation Signature of the tumor.
+Obtained using Alexandrov 2013 mutation signature
+calling algorithm. Contains 7 categories Non-hypermutated, Smoking (4),
+Other, APOBEC (2, 13), UV (7), POLE (10), MMR (6, 15, 20, 26), with the numbers
+within parenthesis indicating the Signature number in COSMIC-30 list. The category
+Non-hypermutated corresponds to tumors with total number of mutations <= 37.
+The threshold 37 is obtained by comparing the median tumor specific mutation burdens
+in \code{impact} and \code{tcga} and then using TCGA hyper-mutation threshold of 500.}
 }
 }
 \source{

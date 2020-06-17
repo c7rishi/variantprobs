@@ -7,7 +7,7 @@
 #' @param N_r frequency of frequency r.
 #' @param  m training cohort size.
 #' @param t positive scalar. The proportion of the future (test) cohort size to the
-#' trianing cohort size.
+#' training cohort size.
 #' @param adj logical. Should the Orlitsky et al. adjustment be used?
 #' Defaults to \code{TRUE}. Ignored if \code{t < 1}.
 #' @note  Either (a) \code{counts}, or (b) \code{r} and
@@ -25,7 +25,7 @@
 #' https://doi.org/10.1093/biomet/43.1-2.45.
 #'
 #' Efron, B., & Thisted, R. (1976). Estimating the Number
-#' of Unsen Species: How Many Words Did Shakespeare
+#' of Unseen Species: How Many Words Did Shakespeare
 #' Know? Biometrika, 63(3), 435–447.
 #' Retrieved from http://www.jstor.org/stable/2335721.
 #'

@@ -4,7 +4,7 @@
 \alias{goodturing_probs}
 \title{Computing Good Turing probabilities of encountering gene variants
 (including hitherto unobserved variants) based on training gene
-mutation frquencies}
+mutation frequencies}
 \usage{
 goodturing_probs(
   counts = NULL,
@@ -28,7 +28,7 @@ goodturing_probs(
 \item{m}{training cohort size.}
 
 \item{N0min}{the minimum value of N0, if known, to be used while
-estiamting \code{N0}. Ignored if N0 is not \code{NULL}.}
+estimating \code{N0}. Ignored if N0 is not \code{NULL}.}
 
 \item{N0}{the total number of unobserved variants. If \code{NULL},
 \code{N0} is estimated using Chao's formula.}
@@ -43,7 +43,7 @@ if N0 is provided.}
 \description{
 Computing Good Turing probabilities of encountering gene variants
 (including hitherto unobserved variants) based on training gene
-mutation frquencies
+mutation frequencies
 }
 \examples{
 \dontrun{

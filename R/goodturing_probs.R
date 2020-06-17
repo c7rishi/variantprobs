@@ -1,30 +1,8 @@
-# # # need an unexported function (.cxx_simple_good_turing)
-# # # from edgeR.
-# # # Since CRAN does not allow `:::`, this is a
-# # # workaround:
-# #
-# #
-# getfrompackage <- function(pkg, name)  {
-#   # get(fun,
-#   #     envir = asNamespace(pkg),
-#   #     inherits = FALSE)
-#   pkg <- as.character(substitute(pkg))
-#   name <- as.character(substitute(name))
-#   get(name, envir = asNamespace(pkg), inherits = FALSE)
-# }
-
-
-
 GoodTuring_orig <- function(r = NULL, N_r = NULL, conf = 1.96)
 {
   n <- N_r[r > 0]
   n0 <- N_r[r == 0]
   r <- r[r > 0]
-  # out0 <- .Call(
-  #   # edgeR:::.cxx_simple_good_turing,
-  #   getfrompackage("edgeR", ".cxx_simple_good_turing"),
-  #   r, n, conf
-  # )
   out <- good_turing_multinom(r, n, conf)
   names(out) <- c("P0", "proportion",
                   "std_error", "slope_okay")
@@ -46,13 +24,13 @@ GoodTuring <- function(r = NULL, N_r = NULL,
 
 #' Computing Good Turing probabilities of encountering gene variants
 #' (including hitherto unobserved variants) based on training gene
-#' mutation frquencies
+#' mutation frequencies
 #'
 #' @inheritParams sgt_Delta
 #' @param N0 the total number of unobserved variants. If \code{NULL},
 #' \code{N0} is estimated using Chao's formula.
 #' @param N0min the minimum value of N0, if known, to be used while
-#' estiamting \code{N0}. Ignored if N0 is not \code{NULL}.
+#' estimating \code{N0}. Ignored if N0 is not \code{NULL}.
 #' @param N12_imp imputed value of N1 and N2 if either of them is 0.
 #' Defaults to 1.
 #' @param N The total number of variants, which is

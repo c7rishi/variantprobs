@@ -19,7 +19,7 @@ sgt_Delta(counts = NULL, r = NULL, N_r = NULL, m, t = 1, adj = TRUE)
 \item{m}{training cohort size.}
 
 \item{t}{positive scalar. The proportion of the future (test) cohort size to the
-trianing cohort size.}
+training cohort size.}
 
 \item{adj}{logical. Should the Orlitsky et al. adjustment be used?
 Defaults to \code{TRUE}. Ignored if \code{t < 1}.}
@@ -71,7 +71,7 @@ when a sample is increased. Biometrika, 43(1–2), 45–63.
 https://doi.org/10.1093/biomet/43.1-2.45.
 
 Efron, B., & Thisted, R. (1976). Estimating the Number
-of Unsen Species: How Many Words Did Shakespeare
+of Unseen Species: How Many Words Did Shakespeare
 Know? Biometrika, 63(3), 435–447.
 Retrieved from http://www.jstor.org/stable/2335721.
 
