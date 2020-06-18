@@ -22,23 +22,23 @@ Rcpp::List good_turing_multinom(
 
   // Computing constant values.
   double bigN=0;
-  double XYs=0, X2Ys=0, meanX=0, meanY=0, Xsquares=0;
+  double XYs=0, meanX=0, meanY=0, Xsquares=0;
   std::vector<double> log_obs(nrows);
   const int last=nrows-1;
 
   for (int i=0; i<nrows; ++i) {
-    const int& o=Obs[i];
-    const int& f=Freq[i];
+    const double& o=Obs[i];
+    const double& f=Freq[i];
     bigN+=o*f;
 
     // Computing log data.
-    const int& x=(i==0 ? 0 : Obs[i-1]);
+    const double& x=(i==0 ? 0 : Obs[i-1]);
     const double& logO=(log_obs[i]=std::log(double(o)));
     const double logZ=std::log(2*f/double(i==last ? 2*(o-x) : Obs[i+1]-x));
     meanX+=logO;
     meanY+=logZ;
     XYs+=logO*logZ;
-    X2Ys+=logO*logO*logZ;
+    // X2Ys+=logO*logO*logZ;
     Xsquares+=logO*logO;
   }
 
@@ -49,15 +49,15 @@ Rcpp::List good_turing_multinom(
   const double slope=XYs/Xsquares;
 
   double Xcent2overYs = 0.0;
-  for (int i = 0; i <nrows; ++i) {
-    Xcent2overYs = sq(Obs[i]-meanX)/Freq[i];
+  for (int i = 0; i < nrows; ++i) {
+    Xcent2overYs = sq(log_obs[i]-meanX)/Freq[i];
   }
   const double sd_slope = std::sqrt(Xcent2overYs)/Xsquares;
 
   // Rcout << "slope= " << slope
   //       << ", slope sdnum= " << sd_slope
   //       <<  std::endl;
-  const bool slope_ok = slope + 1 < 0;
+  const bool slope_ok = (slope + 1 <= 0);
 
   // const double intrcpt=meanY-slope*meanX;
 
